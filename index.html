@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌸 Petal Diary – My Girly Journal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Quicksand:wght@300;400;500;600&family=Pacifico&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Floating Particles Canvas -->
+<canvas id="particleCanvas"></canvas>
+
+
+
+<!--Notification Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- sidebar-->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">🌸</div>
+    <h2 class="logo-text">Petal Diary</h2>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#" class="nav-link active" data-page="journal">
+      <span class="nav-icon">📖</span><span class="nav-label">Journal</span>
+    </a></li>
+    <li><a href="#" class="nav-link" data-page="calendar">
+      <span class="nav-icon">🗓️</span><span class="nav-label">Calendar</span>
+    </a></li>
+    <li><a href="#" class="nav-link" data-page="mascot">
+      <span class="nav-icon">🐰</span><span class="nav-label">My Pet</span>
+    </a></li>
+    <li><a href="#" class="nav-link" data-page="pomodoro">
+      <span class="nav-icon">⏳</span><span class="nav-label">Pomodoro</span>
+    </a></li>
+    <li><a href="#" class="nav-link" data-page="favorites">
+      <span class="nav-icon">💖</span><span class="nav-label">Favorites</span>
+    </a></li>
+    <li><a href="#" class="nav-link" data-page="yearreview">
+      <span class="nav-icon">🌟</span><span class="nav-label">Year Review</span>
+    </a></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <div class="streak-badge">
+      <span class="streak-fire">🔥</span>
+      <div>
+        <div class="streak-count" id="sidebarStreak">0</div>
+        <div class="streak-label">day streak</div>
+      </div>
+    </div>
+    <div class="motivational-quote" id="sidebarQuote"></div>
+  </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content" id="mainContent">
+
+  <!-- ===== PAGE: JOURNAL ===== -->
+  <section class="page active" id="page-journal">
+    <div class="page-header">
+      <h1 class="page-title">📖 My Journal</h1>
+      <div class="header-meta">
+        <div class="current-date-display" id="currentDateDisplay"></div>
+        <div class="theme-badge" id="themeBadge"></div>
+      </div>
+    </div>
+
+    <div class="journal-layout">
+      <!-- Left: Entry List -->
+      <div class="entry-list-panel">
+        <div class="panel-header">
+          <h3>📚 Entries</h3>
+          <button class="btn-new-entry" id="btnNewEntry">+ New</button>
+        </div>
+        <div class="entry-list" id="entryList"></div>
+      </div>
+
+      <!-- Right: Editor -->
+      <div class="editor-panel">
+        <div class="editor-top-bar">
+          <input type="date" id="entryDate" class="date-picker" />
+          <input type="text" id="entryTitle" class="entry-title-input" placeholder="✨ Give your entry a title..." />
+          <div class="entry-mood">
+            <span class="mood-label">Mood:</span>
+            <div class="mood-options">
+              <button class="mood-btn active" data-mood="😊">😊</button>
+              <button class="mood-btn" data-mood="😍">😍</button>
+              <button class="mood-btn" data-mood="😴">😴</button>
+              <button class="mood-btn" data-mood="😢">😢</button>
+              <button class="mood-btn" data-mood="😤">😤</button>
+              <button class="mood-btn" data-mood="🌟">🌟</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticker Panel Toggle -->
+        <div class="sticker-toolbar">
+          <button class="tool-btn" id="toggleStickers">🎀 Stickers</button>
+          <button class="tool-btn" id="toggleImageUpload">🖼️ Image</button>
+          <input type="file" id="imageUpload" accept="image/*" style="display:none" />
+          <div class="word-count" id="wordCount">0 words</div>
+        </div>
+
+        <!-- Sticker Panel -->
+        <div class="sticker-panel" id="stickerPanel" style="display:none">
+          <div class="sticker-categories">
+            <button class="sticker-cat active" data-cat="flowers">🌸 Flowers</button>
+            <button class="sticker-cat" data-cat="hearts">💕 Hearts</button>
+            <button class="sticker-cat" data-cat="stars">⭐ Stars</button>
+            <button class="sticker-cat" data-cat="animals">🐾 Animals</button>
+            <button class="sticker-cat" data-cat="sparkles">✨ Sparkles</button>
+            <button class="sticker-cat" data-cat="bows">🎀 Bows</button>
+          </div>
+          <div class="sticker-grid" id="stickerGrid"></div>
+        </div>
+
+        <!-- Editor Area -->
+        <div class="journal-editor-wrapper" id="journalEditorWrapper">
+          <div class="journal-editor" id="journalEditor" contenteditable="true" 
+               data-placeholder="Dear Diary... ✨ Write your thoughts, dreams, and memories here. This is your safe space 🌸"></div>
+          <!-- Dropped stickers appear here -->
+        </div>
+
+        <div class="editor-actions">
+          <button class="btn-save" id="btnSave">💾 Save Entry</button>
+          <button class="btn-delete" id="btnDelete" style="display:none">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: CALENDAR ===== -->
+  <section class="page" id="page-calendar">
+    <div class="page-header">
+      <h1 class="page-title">🗓️ My Year</h1>
+    </div>
+
+    <div class="year-selector">
+      <button id="prevYear" class="year-btn">‹</button>
+      <span id="calYear" class="cal-year">2025</span>
+      <button id="nextYear" class="year-btn">›</button>
+    </div>
+
+    <div class="year-grid" id="yearGrid"></div>
+  </section>
+
+  <!-- ===== PAGE: MASCOT ===== -->
+  <section class="page" id="page-mascot">
+    <div class="page-header">
+      <h1 class="page-title">🐰 My Pet Bunny</h1>
+    </div>
+
+    <div class="mascot-layout">
+      <div class="mascot-scene">
+        <div class="mascot-bg"></div>
+        <div class="mascot-container" id="mascotContainer">
+          <div class="mascot" id="mascot"></div>
+          <div class="mascot-speech" id="mascotSpeech">Hello! I'm Mochi~ 🌸</div>
+        </div>
+
+        <div class="mascot-stats-card">
+          <h3>🌟 Mochi's Stats</h3>
+          <div class="stat-row">
+            <span>Level</span>
+            <span class="stat-val" id="petLevel">1</span>
+          </div>
+          <div class="xp-bar-wrap">
+            <div class="xp-bar" id="xpBar"></div>
+          </div>
+          <div class="xp-label" id="xpLabel">0 / 100 XP</div>
+
+          <div class="stat-row">
+            <span>Mood</span>
+            <span class="stat-val" id="petMood">😊 Happy</span>
+          </div>
+          <div class="stat-row">
+            <span>Evolution</span>
+            <span class="stat-val" id="petEvolution">Baby Mochi 🐣</span>
+          </div>
+          <div class="stat-row">
+            <span>Entries Written</span>
+            <span class="stat-val" id="petEntries">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mascot-evolutions">
+        <h3>🌱 Evolution Path</h3>
+        <div class="evo-path">
+          <div class="evo-stage" data-stage="0">
+            <div class="evo-icon">🐣</div>
+            <div class="evo-name">Baby</div>
+            <div class="evo-req">Start</div>
+          </div>
+          <div class="evo-arrow">→</div>
+          <div class="evo-stage" data-stage="1">
+            <div class="evo-icon">🐰</div>
+            <div class="evo-name">Bunny</div>
+            <div class="evo-req">Lv 3</div>
+          </div>
+          <div class="evo-arrow">→</div>
+          <div class="evo-stage" data-stage="2">
+            <div class="evo-icon">🌸</div>
+            <div class="evo-name">Blossom</div>
+            <div class="evo-req">Lv 7</div>
+          </div>
+          <div class="evo-arrow">→</div>
+          <div class="evo-stage" data-stage="3">
+            <div class="evo-icon">🦋</div>
+            <div class="evo-name">Butterfly</div>
+            <div class="evo-req">Lv 15</div>
+          </div>
+          <div class="evo-arrow">→</div>
+          <div class="evo-stage" data-stage="4">
+            <div class="evo-icon">✨</div>
+            <div class="evo-name">Celestial</div>
+            <div class="evo-req">Lv 25</div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- ===== PAGE: POMODORO ===== -->
+  <section class="page" id="page-pomodoro">
+    <div class="page-header">
+      <h1 class="page-title">⏳ Focus Garden</h1>
+    </div>
+
+    <div class="pomodoro-layout">
+      <div class="timer-card">
+        <div class="timer-mode" id="timerMode">🌸 Work Time</div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-progress-ring">
+          <svg class="progress-svg" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="54"/>
+            <circle class="ring-fill" id="timerRing" cx="60" cy="60" r="54"/>
+          </svg>
+        </div>
+        <div class="timer-controls">
+  <button class="timer-btn" id="timerStart">▶ Start</button>
+  <button class="timer-btn" id="timerPause">⏸ Pause</button>
+  <button class="timer-btn" id="timerReset">↩ Reset</button>
+</div>
+<div class="timer-duration-picker">
+  <button class="duration-btn active" data-mins="5">5 min</button>
+  <button class="duration-btn" data-mins="10">10 min</button>
+  <button class="duration-btn" data-mins="25">25 min</button>
+</div>
+        <div class="sessions-count">
+          <span>Sessions completed: </span>
+          <span id="sessionCount" class="session-val">0</span>
+        </div>
+      </div>
+
+      <!-- Flower Garden -->
+      <div class="flower-garden">
+        <h3>🌸 Your Bloom Garden</h3>
+        <p class="garden-hint">Complete a Pomodoro session to bloom a flower!</p>
+        <div class="garden-scene" id="gardenScene">
+          <div class="garden-ground"></div>
+          <div class="garden-flowers" id="gardenFlowers"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: FAVORITES ===== -->
+  <section class="page" id="page-favorites">
+    <div class="page-header">
+      <h1 class="page-title">💖 Monthly Favorites</h1>
+    </div>
+
+    <div class="month-selector-row">
+      <select id="favMonthSelect" class="fav-month-select">
+        <option value="0">🌸 January</option>
+        <option value="1">💕 February</option>
+        <option value="2">🌸 March</option>
+        <option value="3">🌷 April</option>
+        <option value="4">☀️ May</option>
+        <option value="5">🌻 June</option>
+        <option value="6">🌴 July</option>
+        <option value="7">🌊 August</option>
+        <option value="8">🍂 September</option>
+        <option value="9">🍁 October</option>
+        <option value="10">❄️ November</option>
+        <option value="11">🎄 December</option>
+      </select>
+    </div>
+
+    <div class="favorites-grid">
+      <div class="fav-card">
+        <div class="fav-card-header">🎵 Favorite Songs</div>
+        <div class="fav-items" id="favSongs"></div>
+        <div class="fav-add-row">
+          <input type="text" id="newSong" class="fav-input" placeholder="Add a song..." />
+          <button class="fav-add-btn" id="addSong">+</button>
+        </div>
+      </div>
+
+      <div class="fav-card">
+        <div class="fav-card-header">🎬 Favorite Movies</div>
+        <div class="fav-items" id="favMovies"></div>
+        <div class="fav-add-row">
+          <input type="text" id="newMovie" class="fav-input" placeholder="Add a movie..." />
+          <button class="fav-add-btn" id="addMovie">+</button>
+        </div>
+      </div>
+
+      <div class="fav-card fav-card-wide">
+        <div class="fav-card-header">💫 Favorite Memories</div>
+        <div class="fav-items" id="favMemories"></div>
+        <div class="fav-add-row">
+          <input type="text" id="newMemory" class="fav-input" placeholder="Add a memory..." />
+          <button class="fav-add-btn" id="addMemory">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: YEAR REVIEW ===== -->
+  <section class="page" id="page-yearreview">
+    <div class="page-header">
+      <h1 class="page-title">🌟 Year in Review</h1>
+    </div>
+
+    <div class="year-review-layout" id="yearReviewContent"></div>
+  </section>
+
+</main>
+
+<!-- ===== MODAL: View/Edit Entry ===== -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
