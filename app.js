@@ -121,60 +121,7 @@ function applyMonthTheme(month) {
 // Apply current month theme on load
 applyMonthTheme(new Date().getMonth());
 
-// ─────────────────────────────────────
-// 5. PARTICLE SYSTEM (floating hearts/sparkles)
-// ─────────────────────────────────────
 
-(function initParticles() {
-  const canvas = document.getElementById('particleCanvas');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  const SYMBOLS = ['🌸','✨','💖','⭐','💕','🌟'];
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function spawnParticle() {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: canvas.height + 20,
-      sym: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-      size: 12 + Math.random() * 14,
-      speed: 0.4 + Math.random() * 0.7,
-      drift: (Math.random() - 0.5) * 0.5,
-      opacity: 0.08 + Math.random() * 0.12,
-      angle: Math.random() * Math.PI * 2,
-      spin: (Math.random() - 0.5) * 0.02,
-    });
-  }
-
-  let frame = 0;
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    frame++;
-    if (frame % 90 === 0) spawnParticle();
-
-    particles = particles.filter(p => p.y > -40);
-    particles.forEach(p => {
-      p.y     -= p.speed;
-      p.x     += p.drift;
-      p.angle += p.spin;
-      ctx.save();
-      ctx.globalAlpha = p.opacity;
-      ctx.font = `${p.size}px serif`;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.angle);
-      ctx.fillText(p.sym, -p.size/2, p.size/2);
-      ctx.restore();
-    });
-    requestAnimationFrame(animate);
-  }
-  animate();
-})();
 
 // ─────────────────────────────────────
 // 6. NAVIGATION
