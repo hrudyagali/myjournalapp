@@ -78,7 +78,6 @@ let state = {
   pomodoroTotalSeconds: POMODORO_WORK,
   favMonth: new Date().getMonth(),
   draggedSticker: null,
-  musicPlaying: false,
 };
 
 // ─────────────────────────────────────
