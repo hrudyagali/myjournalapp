@@ -121,59 +121,7 @@ applyMonthTheme(new Date().getMonth());
 
 
 
-// ─────────────────────────────────────
-// 6. NAVIGATION
-// ─────────────────────────────────────
 
-const navLinks     = document.querySelectorAll('.nav-link');
-const pages        = document.querySelectorAll('.page');
-const sidebar = document.getElementById('sidebar');
-navLinks.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const page = link.dataset.page;
-    navigateTo(page);
-  });
-});
-
-
-function navigateTo(page) {
-  state.currentPage = page;
-  navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === page));
-  pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + page));
-
-  // Page-specific on-enter hooks
-  if (page === 'calendar')    renderYearCalendar();
-  if (page === 'mascot')      renderMascot();
-  if (page === 'favorites')   renderFavorites();
-  if (page === 'yearreview')  renderYearReview();
-}
-
-// ─────────────────────────────────────
-// 7. DATE & QUOTE INIT
-// ─────────────────────────────────────
-
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
-}
-
-function updateDateDisplay() {
-  const now = new Date();
-  document.getElementById('currentDateDisplay').textContent = formatDate(now);
-}
-updateDateDisplay();
-
-function rotateQuote() {
-  const el = document.getElementById('sidebarQuote');
-  el.style.opacity = '0';
-  setTimeout(() => {
-    el.textContent = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-    el.style.transition = 'opacity 1s';
-    el.style.opacity = '1';
-  }, 400);
-}
-rotateQuote();
-setInterval(rotateQuote, 18000);
 
 // ─────────────────────────────────────
 // 8. STREAK TRACKER
